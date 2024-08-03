@@ -94,8 +94,6 @@ def fallback_to_gemini_api(query):
     response = model.generate_content(query)
     return response.text
 
-user_query = "what are the Hydraulic Fracturing Operation Processes"
-generate_answer(user_query)
 
 app = Flask(__name__)
 

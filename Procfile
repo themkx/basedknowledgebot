@@ -1,1 +1,1 @@
-gunicorn flask:app
+gunicorn myapp:app

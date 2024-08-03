@@ -106,13 +106,14 @@ def _q_ue___er_y_():
 
 if __name__ == '__main__':
     # Authenticate ngrok
-    subprocess.run(["ngrok", "authtoken", "2ihyaoXJAvR68SSGxv7M1NYzMQ3_726nCKncYYqecDx17VJo3"])
+   # subprocess.run(["ngrok", "authtoken", "2ihyaoXJAvR68SSGxv7M1NYzMQ3_726nCKncYYqecDx17VJo3"])
 
     # Start ngrok with the specified domain
-    subprocess.Popen(["ngrok", "http", "--domain=swine-proper-toad.ngrok-free.app", "80"])
+  #  subprocess.Popen(["ngrok", "http", "--domain=swine-proper-toad.ngrok-free.app", "80"])
 
     # Pause to ensure ngrok initializes
-    time.sleep(10)
+  #  time.sleep(10)
 
     # Run the Flask app on port 80
-    app.run(port=80)
+#    app.run(port=80)
+    app.run(host='0.0.0.0', port=10000)

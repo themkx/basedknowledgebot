@@ -2,3 +2,4 @@ google-generativeai
 clickhouse-connect
 flask 
 pyngrok
+gunicorn

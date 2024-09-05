@@ -37,7 +37,7 @@ def get_relevant_docs(user_query):
     all_results = []
 
     # Query each document table and collect results
-    for i in range(1, 11):
+    for i in range(1, 13):
         table_name = f"default.document_{i}"
         results = client.query(f"""
             SELECT page_content,

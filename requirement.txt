@@ -3,3 +3,4 @@ clickhouse-connect
 flask 
 pyngrok
 gunicorn
+PyPDF2

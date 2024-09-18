@@ -12,6 +12,7 @@ import google.generativeai as genai
 import clickhouse_connect
 import time
 import subprocess
+from PyPDF2 import PdfReader
 #from google.colab import userdata
 
 #API_KEY=userdata.get('API_KEY')
@@ -57,8 +58,10 @@ def get_relevant_docs(user_query):
     #print(relevant_docs)
     return relevant_docs
 
-def make_rag_prompt(query, relevant_passage):
+def make_rag_prompt(query, relevant_passage, uploaded_text=None):
     relevant_passage = ' '.join(relevant_passage)
+    uploaded_text_file = f"Uploaded Text: '{uploaded_file}'\n" if uploaded_file else ''
+
     prompt = (
       # f"please answer question that is usually about the context of pثtroleum engineering field'\n"
       # f"if the question is out of the context of petroleum engineering you can also answer it easy\n\n"
@@ -69,6 +72,7 @@ def make_rag_prompt(query, relevant_passage):
       #  f"so please respond in detail and don't worry of the user don't uderstand you because he has high level of knowledge in the petroleum engineerig field.\n\n"
         f"if the question is Hi or something like Welcome try response to him simply like: hi, how can I help you. or something like that"
         f"QUESTION: '{query}'\n"
+        f"{uploaded_text_file}\n"
         f"help: '{relevant_passage}'\n\n"
         #f"ANSWER:"
     )
@@ -82,10 +86,10 @@ def generate_response(user_prompt):
     answer = model.generate_content(user_prompt)
     return answer.text
 
-def generate_answer(query):
+def generate_answer(query, uploaded_text=None):
     relevant_text = get_relevant_docs(query)
     text = " ".join(relevant_text)
-    prompt = make_rag_prompt(query, relevant_passage=relevant_text)
+    prompt = make_rag_prompt(query, relevant_passage=relevant_text, uploaded_text = uploaded_text)
     answer = generate_response(prompt)
     return answer
 
@@ -100,7 +104,25 @@ app = Flask(__name__)
 @app.route('/query', methods=['POST'])
 def _q_ue___er_y_():
     user_query = request.json['query']
-    answer = generate_answer(user_query)
+    #answer = generate_answer(user_query)
+    # Handle optional file upload (PDF)
+    if 'file' in request.files:
+        file = request.files['file']
+        if file.filename.endswith('.pdf'):
+            # Save the uploaded file temporarily
+            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                file.save(temp_file.name)
+
+                # Extract text from the PDF
+                pdf_text = extract_text_from_pdf(temp_file.name)
+                answer = generate_answer(user_query,uploaded_text = pdf_text)
+                # Clean up the temp file after use
+                os.remove(temp_file.name)
+
+                # Optionally, use the extracted text in the query or pass it to the model
+                user_query += " " + pdf_text
+
+    # Generate the answer based on the query
     #trimmed_answer = answer.strip()  # Ensure trimming here
     return jsonify({"response": answer})
 

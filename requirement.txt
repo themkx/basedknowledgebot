@@ -1,6 +1,6 @@
 google-generativeai  
 clickhouse-connect
-flask 
+flask
 pyngrok
 gunicorn
 PyPDF2

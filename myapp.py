@@ -100,6 +100,13 @@ def fallback_to_gemini_api(query):
 
 
 app = Flask(__name__)
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' in request.files:
+        file = request.files['file']
+        file.save(os.path.join(tempfile.gettempdir(), file.filename))
+        return jsonify({"status": "success", "message": "File uploaded successfully"}), 200
+    return jsonify({"status": "error", "message": "No file uploaded"}), 400
 
 @app.route('/query', methods=['POST'])
 def _q_ue___er_y_():

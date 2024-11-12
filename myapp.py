@@ -22,11 +22,12 @@ def get_embeddings(text):
         embeddingg = genai.embed_content(model=model, content=text, task_type="retrieval_document")
         return embeddingg['embedding']
 
+
 client = clickhouse_connect.get_client(
-    host='msc-36a83f0b.us-east-1.aws.myscale.com',
+    host='msc-d788868e.us-east-1.aws.myscale.com',
     port=443,
     username='elmahdi_karef_org_default',
-    password='passwd_e5MKRCbKibvXQa'
+    password='passwd_mTp79fpQHy39R7'
 )
 
 def get_relevant_docs(user_query):
